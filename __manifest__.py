@@ -4,7 +4,7 @@
 
 {
     'name': "Account Move Template",
-    'version': '12.0.0.0.1',
+    'version': '12.0.0.0.2',
     'category': 'Generic Modules/Accounting',
     'summary': "Templates for recurring Journal Entries",
     'author': "Agile Business Group,Odoo Community Association (OCA), Aurium "

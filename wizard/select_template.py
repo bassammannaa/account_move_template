@@ -49,18 +49,28 @@ class WizardSelectMoveTemplate(models.TransientModel):
     @api.multi
     def load_template(self):
         self.ensure_one()
+
         input_lines = {}
+        partners_lines = {}
+        employee_lines = {}
+        office_branchs_lines = {}
+        applications_lines = {}
         for template_line in self.line_ids:
             input_lines[template_line.sequence] = template_line.amount
+            partners_lines[template_line.sequence] = template_line.partner_id.id
+            employee_lines[template_line.sequence] = template_line.employee.id
+            office_branchs_lines[template_line.sequence] = template_line.office_branch.id
+            applications_lines[template_line.sequence] = template_line.application_id.id
+
+
         amounts = self.template_id.compute_lines(input_lines)
         name = self.template_id.name
         journal = self.template_id.journal_id.id
 
-
         move = self._create_move(name, journal)
         lines = []
         for line in self.template_id.template_line_ids:
-            lines.append((0, 0, self._prepare_line(line, amounts, journal)))
+            lines.append((0, 0, self._prepare_line(line, amounts, journal, partners_lines, employee_lines, office_branchs_lines, applications_lines)))
 
         move.write({'line_ids': lines})
 
@@ -78,8 +88,6 @@ class WizardSelectMoveTemplate(models.TransientModel):
         #         lines.append((0, 0,
         #                       self._prepare_line(line, amounts, partner)))
         #     move.write({'line_ids': lines})
-
-
 
         return {
             'domain': [('id', 'in', move.ids)],
@@ -99,20 +107,20 @@ class WizardSelectMoveTemplate(models.TransientModel):
         })
 
     @api.model
-    def _prepare_line(self, line, amounts, journal_id):
+    def _prepare_line(self, line, amounts, journal_id, partners_lines, employee_lines, office_branchs_lines, applications_lines):
         debit = line.move_line_type == 'dr'
         values = {
             'name': line.name,
             'journal_id': journal_id,
             'analytic_account_id': line.analytic_account_id.id,
             'account_id': line.account_id.id,
-            'employee': line.employee.id,
-            'office_branch': line.office_branch.id,
-            'application_id': line.application_id.id,
+            'employee': employee_lines[line.sequence],
+            'office_branch': office_branchs_lines[line.sequence],
+            'application_id': applications_lines[line.sequence],
             'date': time.strftime('%Y-%m-%d'),
             'credit': not debit and amounts[line.sequence] or 0.0,
             'debit': debit and amounts[line.sequence] or 0.0,
-            'partner_id': line.partner_id.id,
+            'partner_id': partners_lines[line.sequence],
         }
         return values
 

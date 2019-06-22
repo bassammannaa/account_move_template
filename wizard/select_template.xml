@@ -8,11 +8,11 @@
                 <field name="state" invisible="1"/>
                 <group>
                     <group>
-                        <field name="template_id" widget="selection"
+                        <field name="template_id"
                                attrs="{'invisible':[('state','=','template_selected')]}"/>
                     </group>
                     <group>
-                        <field name="partner_id" attrs="{'invisible':1}"/>
+
                     </group>
                 </group>
                 <separator
@@ -39,11 +39,13 @@
                     <field name="sequence" invisible="1"/>
                     <field name="name"/>
                     <field name="account_id"/>
+                    <field name="partner_id"/>
                     <field name="employee"/>
                     <field name="office_branch"/>
                     <field name="application_id"/>
-                    <field name="move_line_type"/>
                     <field name="amount"/>
+                    <field name="move_line_type"/>
+
                 </group>
             </form>
         </field>
@@ -57,11 +59,13 @@
                 <field name="sequence" invisible="1"/>
                 <field name="name"/>
                 <field name="account_id"/>
+                <field name="partner_id"/>
                 <field name="employee"/>
                 <field name="office_branch"/>
                 <field name="application_id"/>
-                <field name="move_line_type"/>
                 <field name="amount"/>
+                <field name="move_line_type"/>
+
             </tree>
         </field>
     </record>

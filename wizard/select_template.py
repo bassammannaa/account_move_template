@@ -11,10 +11,8 @@ class WizardSelectMoveTemplate(models.TransientModel):
 
     template_id = fields.Many2one('account.move.template', required=True)
     partner_id = fields.Many2one('res.partner', 'Partner')
-    line_ids = fields.One2many(
-        'wizard.select.move.template.line', 'template_id')
-    state = fields.Selection(
-        [('template_selected', 'Template selected')], 'State')
+    line_ids = fields.One2many('wizard.select.move.template.line', 'template_id')
+    state = fields.Selection([('template_selected', 'Template selected')], 'State')
 
     @api.multi
     def load_lines(self):
@@ -31,6 +29,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
                 'office_branch': line.office_branch.id,
                 'application_id': line.application_id.id,
                 'move_line_type': line.move_line_type,
+                'partner_id': line.partner_id.id,
             })
         if not self.line_ids:
             return self.load_template()
@@ -55,19 +54,35 @@ class WizardSelectMoveTemplate(models.TransientModel):
             input_lines[template_line.sequence] = template_line.amount
         amounts = self.template_id.compute_lines(input_lines)
         name = self.template_id.name
-        partner = self.partner_id.id
-        moves = self.env['account.move']
-        for journal in self.template_id.template_line_ids.mapped('journal_id'):
-            lines = []
-            move = self._create_move(name, journal.id, partner)
-            moves = moves + move
-            for line in self.template_id.template_line_ids.filtered(
-                    lambda j: j.journal_id == journal):
-                lines.append((0, 0,
-                              self._prepare_line(line, amounts, partner)))
-            move.write({'line_ids': lines})
+        journal = self.template_id.journal_id.id
+
+
+        move = self._create_move(name, journal)
+        lines = []
+        for line in self.template_id.template_line_ids:
+            lines.append((0, 0, self._prepare_line(line, amounts, journal)))
+
+        move.write({'line_ids': lines})
+
+
+
+        # partner = self.partner_id.id
+        # moves = self.env['account.move']
+        # for journal in self.template_id.template_line_ids.mapped('journal_id'):
+        #     lines = []
+        #
+        #     move = self._create_move(name, journal.id, partner)
+        #     moves = moves + move
+        #     for line in self.template_id.template_line_ids.filtered(
+        #             lambda j: j.journal_id == journal):
+        #         lines.append((0, 0,
+        #                       self._prepare_line(line, amounts, partner)))
+        #     move.write({'line_ids': lines})
+
+
+
         return {
-            'domain': [('id', 'in', moves.ids)],
+            'domain': [('id', 'in', move.ids)],
             'name': 'Entries from template: %s' % name,
             'view_type': 'form',
             'view_mode': 'tree,form',
@@ -77,19 +92,18 @@ class WizardSelectMoveTemplate(models.TransientModel):
         }
 
     @api.model
-    def _create_move(self, ref, journal_id, partner_id):
+    def _create_move(self, ref, journal_id):
         return self.env['account.move'].create({
             'ref': ref,
             'journal_id': journal_id,
-            'partner_id': partner_id,
         })
 
     @api.model
-    def _prepare_line(self, line, amounts, partner_id):
+    def _prepare_line(self, line, amounts, journal_id):
         debit = line.move_line_type == 'dr'
         values = {
             'name': line.name,
-            'journal_id': line.journal_id.id,
+            'journal_id': journal_id,
             'analytic_account_id': line.analytic_account_id.id,
             'account_id': line.account_id.id,
             'employee': line.employee.id,
@@ -98,7 +112,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
             'date': time.strftime('%Y-%m-%d'),
             'credit': not debit and amounts[line.sequence] or 0.0,
             'debit': debit and amounts[line.sequence] or 0.0,
-            'partner_id': partner_id,
+            'partner_id': line.partner_id.id,
         }
         return values
 
@@ -121,4 +135,6 @@ class WizardSelectMoveTemplateLine(models.TransientModel):
                                     string='Office Branch', required=False, )
     application_id = fields.Many2one('housemaid.applicant.applications',
                                      string="Housemaid Ref", required=False)
+    partner_id = fields.Many2one('res.partner', 'Partner')
+
 

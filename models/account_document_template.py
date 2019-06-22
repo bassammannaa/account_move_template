@@ -8,7 +8,6 @@ from functools import partial
 import re
 
 
-
 class AccountDocumentTemplate(models.Model):
     _name = 'account.document.template'
     _rec_name = 'name'
@@ -82,8 +81,8 @@ class AccountDocumentTemplateLine(models.Model):
 
     name = fields.Char(required=True)
     sequence = fields.Integer(required=True)
-    type = fields.Selection([
-        ('computed', 'Computed'),
-        ('input', 'User input'),
-    ], required=True, default='input')
+    type = fields.Selection([('computed', 'Computed'), ('input', 'User input'), ], required=True, default='input')
     python_code = fields.Text()
+
+
+

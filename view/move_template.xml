@@ -43,15 +43,15 @@
                             <field name="analytic_account_id" groups="analytic.group_analytic_accounting"/>
                         </group>
                     </group>
-<!--                    <label for="python_code" string="Python Code"-->
-<!--                           attrs="{'invisible': [('type', '!=', 'computed')]}" nolabel="1"/>-->
-<!--                    <field name="python_code" colspan="4" attrs="{'readonly': [('type', '!=', 'computed')]}"-->
-<!--                           nolabel="1"/>-->
-<!--                    <div class="oe_account_help">You can refer to other lines using their-->
-<!--                        sequence number (e.g. 'L(1)' for first line).-->
-<!--                        Examples of code: 'L(1) * 0.2'; 'L(2) - L(1)'; 'L(1)-->
-<!--                        + L(2) + L(3)'; '1250'-->
-<!--                    </div>-->
+                    <!--                    <label for="python_code" string="Python Code"-->
+                    <!--                           attrs="{'invisible': [('type', '!=', 'computed')]}" nolabel="1"/>-->
+                    <!--                    <field name="python_code" colspan="4" attrs="{'readonly': [('type', '!=', 'computed')]}"-->
+                    <!--                           nolabel="1"/>-->
+                    <!--                    <div class="oe_account_help">You can refer to other lines using their-->
+                    <!--                        sequence number (e.g. 'L(1)' for first line).-->
+                    <!--                        Examples of code: 'L(1) * 0.2'; 'L(2) - L(1)'; 'L(1)-->
+                    <!--                        + L(2) + L(3)'; '1250'-->
+                    <!--                    </div>-->
                 </sheet>
             </form>
         </field>
@@ -62,12 +62,12 @@
         <field name="model">account.move.template</field>
         <field name="arch" type="xml">
             <form string="Journal Entry Template">
-<!--                <header>-->
-<!--                    <button string="Test template"-->
-<!--                            name="action_run_template"-->
-<!--                            class="btn-primary"-->
-<!--                            type="object"/>-->
-<!--                </header>-->
+                <!--                <header>-->
+                <!--                    <button string="Test template"-->
+                <!--                            name="action_run_template"-->
+                <!--                            class="btn-primary"-->
+                <!--                            type="object"/>-->
+                <!--                </header>-->
                 <sheet>
                     <div class="oe_title">
                         <label for="name" class="oe_edit_only" string="Movement Name"/>
@@ -121,6 +121,9 @@
                     <field name="journal_id"/>
                     <field name="company_id" widget="selection" groups="base.group_multi_company"/>
                 </group>
+                <group expand="0" string="Group By">
+                    <filter name="journal_id" string="Journal" domain="[]" context="{'group_by':'journal_id'}"/>
+                </group>
             </search>
         </field>
     </record>
@@ -130,6 +133,7 @@
         <field name="res_model">account.move.template</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
+        <field name="context">{"search_default_journal_id":True}</field>
         <field name="search_view_id" ref="view_move_template_search"/>
     </record>
 

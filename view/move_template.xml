@@ -121,9 +121,9 @@
                     <field name="journal_id"/>
                     <field name="company_id" widget="selection" groups="base.group_multi_company"/>
                 </group>
-                <group expand="0" string="Group By">
-                    <filter name="journal_id" string="Journal" domain="[]" context="{'group_by':'journal_id'}"/>
-                </group>
+<!--                <group expand="0" string="Group By">-->
+<!--                    <filter name="journal_id" string="Journal" domain="[]" context="{'group_by':'journal_id'}"/>-->
+<!--                </group>-->
             </search>
         </field>
     </record>

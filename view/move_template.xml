@@ -15,7 +15,7 @@
                 <field name="employee"/>
                 <field name="office_branch"/>
                 <field name="application_id"/>
-
+                <field name="account_items"/>
             </tree>
         </field>
     </record>
@@ -39,6 +39,7 @@
                             <field name="employee"/>
                             <field name="office_branch"/>
                             <field name="application_id"/>
+                            <field name="account_items"/>
                         </group>
                     </group>
                 </sheet>
@@ -116,6 +117,7 @@
                 <field name="employee"/>
                 <field name="office_branch"/>
                 <field name="application_id"/>
+                <field name="account_items"/>
             </xpath>
 
             <xpath expr="//field[@name='tax_ids']" position="replace">

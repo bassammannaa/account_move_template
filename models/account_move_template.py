@@ -43,6 +43,8 @@ class AccountMoveTemplateLine(models.Model):
     application_id = fields.Many2one('housemaid.applicant.applications',
                                      string="Housemaid Ref", required=False)
     partner_id = fields.Many2one('res.partner', 'Partner')
+    account_items = fields.Many2one('housemaid.configuration.accountitems',
+                                    string='Account Items', required=False, )
 
     _sql_constraints = [
         ('sequence_template_uniq', 'unique (template_id,sequence)',
@@ -60,4 +62,6 @@ class AccountMoveLineLists(models.Model):
                                     string='Office Branch', ondelete='restrict',)
     application_id = fields.Many2one('housemaid.applicant.applications',
                                      string="Housemaid Ref", ondelete='restrict', )
+    account_items = fields.Many2one('housemaid.configuration.accountitems',
+                                    string='Account Items', required=False, )
 

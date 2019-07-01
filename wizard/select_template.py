@@ -27,6 +27,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
                 'account_id': line.account_id.id,
                 'employee': line.employee.id,
                 'office_branch': line.office_branch.id,
+                'account_items': line.account_items.id,
                 'application_id': line.application_id.id,
                 'move_line_type': line.move_line_type,
                 'partner_id': line.partner_id.id,
@@ -54,6 +55,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
         partners_lines = {}
         employee_lines = {}
         office_branchs_lines = {}
+        account_items_lines = {}
         applications_lines = {}
         for template_line in self.line_ids:
             input_lines[template_line.sequence] = template_line.amount
@@ -61,7 +63,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
             employee_lines[template_line.sequence] = template_line.employee.id
             office_branchs_lines[template_line.sequence] = template_line.office_branch.id
             applications_lines[template_line.sequence] = template_line.application_id.id
-
+            account_items_lines[template_line.sequence] = template_line.account_items.id
 
         amounts = self.template_id.compute_lines(input_lines)
         name = self.template_id.name
@@ -70,7 +72,8 @@ class WizardSelectMoveTemplate(models.TransientModel):
         move = self._create_move(name, journal)
         lines = []
         for line in self.template_id.template_line_ids:
-            lines.append((0, 0, self._prepare_line(line, amounts, journal, partners_lines, employee_lines, office_branchs_lines, applications_lines)))
+            lines.append((0, 0, self._prepare_line(line, amounts, journal, partners_lines, employee_lines, office_branchs_lines,
+                                                   applications_lines, account_items_lines)))
 
         move.write({'line_ids': lines})
 
@@ -107,7 +110,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
         })
 
     @api.model
-    def _prepare_line(self, line, amounts, journal_id, partners_lines, employee_lines, office_branchs_lines, applications_lines):
+    def _prepare_line(self, line, amounts, journal_id, partners_lines, employee_lines, office_branchs_lines, applications_lines, account_items_lines):
         debit = line.move_line_type == 'dr'
         values = {
             'name': line.name,
@@ -116,6 +119,7 @@ class WizardSelectMoveTemplate(models.TransientModel):
             'account_id': line.account_id.id,
             'employee': employee_lines[line.sequence],
             'office_branch': office_branchs_lines[line.sequence],
+            'account_items': account_items_lines[line.sequence],
             'application_id': applications_lines[line.sequence],
             'date': time.strftime('%Y-%m-%d'),
             'credit': not debit and amounts[line.sequence] or 0.0,
@@ -144,5 +148,7 @@ class WizardSelectMoveTemplateLine(models.TransientModel):
     application_id = fields.Many2one('housemaid.applicant.applications',
                                      string="Housemaid Ref", required=False)
     partner_id = fields.Many2one('res.partner', 'Partner')
+    account_items = fields.Many2one('housemaid.configuration.accountitems',
+                                    string='Account Item', required=False, )
 
 

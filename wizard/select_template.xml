@@ -42,7 +42,9 @@
                     <field name="partner_id"/>
                     <field name="employee"/>
                     <field name="office_branch"/>
+
                     <field name="application_id"/>
+                    <field name="account_items"/>
                     <field name="amount"/>
                     <field name="move_line_type"/>
 
@@ -63,6 +65,7 @@
                 <field name="employee"/>
                 <field name="office_branch"/>
                 <field name="application_id"/>
+                <field name="account_items"/>
                 <field name="amount"/>
                 <field name="move_line_type"/>
 

@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 12.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-28 01:16+0000\n"
-"PO-Revision-Date: 2019-06-28 01:16+0000\n"
+"POT-Creation-Date: 2019-07-06 04:08+0000\n"
+"PO-Revision-Date: 2019-07-06 04:08+0000\n"
 "Last-Translator: <>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,6 +20,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:account_move_template.field_wizard_select_move_template_line__account_id
 msgid "Account"
 msgstr "الحساب"
+
+#. module: account_move_template
+#: model:ir.model.fields,field_description:account_move_template.field_wizard_select_move_template_line__account_items
+msgid "Account Item"
+msgstr "تفاصيل الحساب"
+
+#. module: account_move_template
+#: model:ir.model.fields,field_description:account_move_template.field_account_move_line__account_items
+#: model:ir.model.fields,field_description:account_move_template.field_account_move_template_line__account_items
+msgid "Account Items"
+msgstr "تفاصيل الحساب"
 
 #. module: account_move_template
 #: model:ir.model.fields,field_description:account_move_template.field_account_move_template__message_needaction
@@ -68,11 +79,6 @@ msgstr "تجميع"
 #: model:ir.ui.menu,name:account_move_template.menu_action_wizard_select_template
 msgid "Create Move from Template"
 msgstr "إنشاء ترحيل جديد من نماذج الترحيلات"
-
-#. module: account_move_template
-#: model_terms:ir.actions.act_window,help:account_move_template.action_move_template_form
-msgid "Create a new document"
-msgstr "انشاء ورقه جديده"
 
 #. module: account_move_template
 #: model:ir.model.fields,field_description:account_move_template.field_account_document_template__create_uid
@@ -344,7 +350,7 @@ msgstr "فرع المكتب"
 #: model:ir.model.fields,field_description:account_move_template.field_wizard_select_move_template__partner_id
 #: model:ir.model.fields,field_description:account_move_template.field_wizard_select_move_template_line__partner_id
 msgid "Partner"
-msgstr "المورد/الكفيل"
+msgstr "الشريك"
 
 #. module: account_move_template
 #: model:ir.model.fields,field_description:account_move_template.field_account_document_template_line__python_code
